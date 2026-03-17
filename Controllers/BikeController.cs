@@ -24,15 +24,27 @@ public class BikeController : ControllerBase
     {
         return Ok(_dbContext
             .Bikes
-            .Select(b => new BikeDTO
-            {
-                Id = b.Id,
-                Brand = b.Brand,
-                Color = b.Color,
-                BikeTypeId = b.BikeTypeId,
-                OwnerId = b.OwnerId
-            })
+            .Include(b => b.Owner)
             .ToList());
+    }
+
+    [HttpGet("{id}")]
+    [Authorize]
+    public IActionResult GetById(int id)
+    {
+        Bike bike = _dbContext
+            .Bikes
+            .Include(b => b.Owner)
+            .Include(b => b.BikeType)
+            .Include(b => b.WorkOrders)
+            .SingleOrDefault(b => b.Id == id);
+
+        if (bike == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(bike);
     }
 
 }
