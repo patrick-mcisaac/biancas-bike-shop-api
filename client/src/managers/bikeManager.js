@@ -9,5 +9,5 @@ export const getBikeById = (id) => {
 };
 
 export const getBikesInShopCount = () => {
-  // return fetch(`${apiUrl}`).then((res) => res.json())
+  return fetch(`${apiUrl}/inventory`).then((res) => res.json())
 };
